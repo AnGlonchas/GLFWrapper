@@ -1,17 +1,30 @@
+/*
+
+This file is only for testing
+the glfwrapper.h is the product
+feel free to edit this file
+
+*/
+
 #define GLFW_INCLUDE_NONE
 #include "include/GLFW/glfw3.h"
-#include <windows.h>
-#include <stdio.h>
+#include "glfwrapper.h"
 
-int main(){
+#include <stdio.h>
+#include <GL/gl.h>
+
+int main()
+{
+    GLFWwindow* window;
+
     /* Initialize the library */
-    if (!glfwInit()) {
+    if (!glfwInit())
         return -1;
-    }
 
     /* Create a windowed mode window and its OpenGL context */
-    GLFWwindow *window = glfwCreateWindow(640, 480, "Shit", NULL, NULL);
-    if (!window) {
+    window = glfwCreateWindow(640, 480, "Hello triangle", NULL, NULL);
+    if (!window)
+    {
         glfwTerminate();
         return -1;
     }
@@ -22,7 +35,16 @@ int main(){
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
         /* Render here */
-        //glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glBegin(GL_TRIANGLES);
+
+        glVertex2f(-0.5f, -0.5f);
+        glVertex2f( 0.0f,  0.5f);
+        glVertex2f( 0.5f, -0.5f);
+
+        glEnd();
+
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
