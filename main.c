@@ -11,6 +11,8 @@ the left side is x = -1
 the right side is x = 1
 same for y
 
+see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
+
 */
 
 #define GLFW_INCLUDE_NONE

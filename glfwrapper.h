@@ -1,3 +1,10 @@
+/*
+
+see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
+
+*/
+
+
 #ifndef HEADER_H
 
 #define GLFW_INCLUDE_NONE
@@ -60,13 +67,6 @@ static clock_t start;
 static clock_t stop;
 static double delta;
 
-
-/*
-Drawing Modes for Opengl
-
-see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
-
-*/
 void takeTime() {
     start = clock();
 }
@@ -79,6 +79,15 @@ void getTime() {
 double getFrameTime() {
     return delta;
 }
+
+
+
+/*
+Drawing Modes for Opengl
+
+see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
+
+*/
 
 void setBackgroundColor(float r, float g, float b) {
     glClearColor(r,g,b,1.0f);
