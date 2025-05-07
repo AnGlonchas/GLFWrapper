@@ -2,7 +2,7 @@
 Download [here](https://github.com/niXman/mingw-builds-binaries/releases/download/14.2.0-rt_v12-rev1/x86_64-14.2.0-release-win32-seh-msvcrt-rt_v12-rev1.7z) \
 In cmd type `set PATH=%PATH%;C:/path/to/gcc.exe` \
 Reopen cmd and type `gcc --version` \
-You should see something like \
+You should see something like 
 ```
 gcc.exe (x86_64-posix-seh-rev0, Built by MinGW-Builds project) 14.2.0
 Copyright (C) 2024 Free Software Foundation, Inc.
