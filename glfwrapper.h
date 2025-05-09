@@ -52,6 +52,13 @@ typedef struct {
     float deltatime;
 } DeltaTime;
 
+typedef struct {
+    float x;
+    float y;
+    float w;
+    float h;
+} Rect;
+
 Shader LoadShader(const char *vertexPath, const char *fragPath) {
     // To do
 }
@@ -89,6 +96,27 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 */
 
+GLFWwindow* createWindow(){
+    GLFWwindow* window;
+
+    // Initialize the library
+    if (!glfwInit())
+        exit(1);
+
+    // Create a windowed mode window and its OpenGL context
+    window = glfwCreateWindow(640, 640, "Test file", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        exit(1);
+    }
+
+    // Make the window's context current
+    glfwMakeContextCurrent(window);
+
+    return window;
+}
+
 void setBackgroundColor(float r, float g, float b) {
     glClearColor(r,g,b,1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -106,19 +134,44 @@ void drawLine(float x1, float y1, float x2, float y2) {
     glEnd();
 }
 
-void drawRectangle(float x, float y, float w, float h) {
+void drawTriangle(float x, float y, float w, float h){
     glBegin(GL_TRIANGLES);
+    glVertex2f(x,y);
+    glVertex2f(x-(w/2.0f), y-h);
+    glVertex2f(x+(w/2.0f), y-h);              
+    glEnd();
+}
+
+void drawTriangleLines(float x, float y, float w, float h){
+    glBegin(GL_LINES);
 
     glVertex2f(x  ,y  );
-    glVertex2f(x  ,y+h);
-    glVertex2f(x+w,y+h);
+    glVertex2f(x+(w/2.0f)  ,y-h);
 
     glVertex2f(x  ,y  );
-    glVertex2f(x+w,y  );
-    glVertex2f(x+w,y+h);
+    glVertex2f(x-(w/2.0f)  ,y-h);
+
+    glVertex2f(x+(w/2.0f)  ,y-h);
+    glVertex2f(x-(w/2.0f)  ,y-h);
 
     glEnd();
 }
+
+
+void drawRectangle(Rect r) {
+    glBegin(GL_TRIANGLES);
+
+    glVertex2f(r.x  ,r.y  );
+    glVertex2f(r.x  ,r.y+r.h);
+    glVertex2f(r.x+r.w,r.y+r.h);
+
+    glVertex2f(r.x  ,r.y  );
+    glVertex2f(r.x+r.w,r.y  );
+    glVertex2f(r.x+r.w,r.y+r.h);
+
+    glEnd();
+}
+
 
 void drawRectangleLines(float x, float y, float w, float h) {
     glBegin(GL_LINES);
