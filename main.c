@@ -46,10 +46,11 @@ int main()
         // Render here
         setBackgroundColor(0.0f,0.2f,0.5f);
 
+        drawRectangle(0.0f, 0.0f, 0.5f, 0.5f);
 
-        drawPolygonLines(0.0f, 0.0f, 0.1f, 8);
-        //drawRectangle(0.0f, 0.0f, 0.5, 0.5f);
+        drawPolygonLines(0.0f, 0.0f, 0.1f, 2);
         drawRectangleLines(0.0f, 0.0f, 0.5, 0.5f);
+
         //drawLine(-0.5f, -0.5f, 0.5f, 0.5f);
 
 

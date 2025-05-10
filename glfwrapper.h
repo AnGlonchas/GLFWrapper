@@ -89,6 +89,32 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 */
 
+void DrawImage(char filename, int xx, int yy, int ww, int hh, int angle) {
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, filename);
+  
+    glLoadIdentity();
+    glTranslatef(xx,yy,0.0);
+    glRotatef(angle,0.0,0.0,1.0);
+    glTranslatef(-xx,-yy,0.0);
+
+    // Draw a textured quad
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex2f(xx,yy);
+    glTexCoord2f(0, 1); glVertex2f(xx,yy + hh);
+    glTexCoord2f(1, 1); glVertex2f(xx + ww,yy + hh);
+    glTexCoord2f(1, 0); glVertex2f(xx + ww,yy);
+    
+    glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
+    
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    
+    glMatrixMode(GL_MODELVIEW);
+    glEnd();
+}
+
 void setBackgroundColor(float r, float g, float b) {
     glClearColor(r,g,b,1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -108,7 +134,7 @@ void drawLine(float x1, float y1, float x2, float y2) {
 
 void drawRectangle(float x, float y, float w, float h) {
     glBegin(GL_TRIANGLES);
-
+    glColor3f(1.0f,0.5f,0.0f);
     glVertex2f(x  ,y  );
     glVertex2f(x  ,y+h);
     glVertex2f(x+w,y+h);
@@ -116,6 +142,8 @@ void drawRectangle(float x, float y, float w, float h) {
     glVertex2f(x  ,y  );
     glVertex2f(x+w,y  );
     glVertex2f(x+w,y+h);
+
+    glColor3f(1.0f,1.0f,1.0f);
 
     glEnd();
 }
