@@ -15,39 +15,38 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 */
 
-
+#include <stdio.h>
 #include "glfwrapper.h"
 
-int main()
-{
-    GLFWwindow* window = createWindow();
+int main() {
+    Window* window = createWindow(640, 640, "TestFile");
+    SetVsync(1);
 
     Rect rectangle1  = {0,0,0.5,0.5};
+    Color red = {1.0f, 0.0f, 0.0f, 1.0f};
 
     // Loop until the user closes the window
-    while (!glfwWindowShouldClose(window)) {
+    while (isWindowOpen(window)) {
         // Render here
-        setBackgroundColor(0.0f,0.2f,0.5f);
+        updateBackgroundColor(BLACK);
+        if(isKeyDown(KEY_D, window)) {
+            rectangle1.x += 0.05f*getDeltaTime();
+        }
+        if(isKeyDown(KEY_W, window)) {
+            rectangle1.y += 0.05f*getDeltaTime();
+        }
+        if(isKeyDown(KEY_A, window)) {
+            rectangle1.x -= 0.05f*getDeltaTime();
+        }
+        if(isKeyDown(KEY_S, window)) {
+            rectangle1.y -= 0.05f*getDeltaTime();
+        }
 
-        drawRectangle(0.0f, 0.0f, 0.5f, 0.5f);
-        drawPolygonLines(0.0f, 0.0f, 0.1f, 2);
-        drawRectangleLines(0.0f, 0.0f, 0.5, 0.5f);
+        drawRectangleRect(rectangle1, LIGHTRED);
 
-        drawPolygonLines(0.0f, 0.0f, 0.1f, 10);
-        drawRectangleRect(rectangle1);
-        //drawRectangleLines(0.0f, 0.0f, 0.5, 0.5f);
-        //drawLine(-0.5f, -0.5f, 0.5f, 0.5f);
-        drawTriangleLines(0.0f, 0.0f, 0.1f, 0.1f);
-        //drawTriangle(0.0f, 0.0f, 0.1f, 0.1f);
-
-
-        // Swap front and back buffers
-        glfwSwapBuffers(window);
-
-        // Poll for and process events
-        glfwPollEvents();
+        updateWindow(window);
     }
 
-    glfwTerminate();
+    closeWindow();
     return 0;
 }
