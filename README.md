@@ -1,3 +1,24 @@
+# Basic Setup
+```c
+#include "glfwrapper.h"
+
+int main() {
+    Window* window = createWindow(640, 640, "Easy Example");
+
+    // Loop until the user closes the window
+    while (isWindowOpen(window)) {
+        updateBackgroundColor(BLACK);
+
+        drawRectangle(0.0f, 0.0f, 1.0f, 1.0f, RED);
+
+        updateWindow(window);
+    }
+
+    closeWindow();
+    return 0;
+}
+```
+
 # Install compiler
 Download [here](https://github.com/niXman/mingw-builds-binaries/releases/download/14.2.0-rt_v12-rev1/x86_64-14.2.0-release-win32-seh-msvcrt-rt_v12-rev1.7z) \
 In the cmd type `setx path "%path%;c:/path/to/gcc.exe` \
