@@ -316,10 +316,6 @@ Fps stuff
 
 */
 
-void setFPS(int target) {
-    fps = target;
-}
-
 double getFPS() {
     return 1/deltaTime;
 }
