@@ -15,31 +15,14 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 */
 
-#define GLFW_INCLUDE_NONE
-#include "include/GLFW/glfw3.h"
-#include "glfwrapper.h"
 
-#include <stdio.h>
-#include <GL/gl.h>
+#include "glfwrapper.h"
 
 int main()
 {
-    GLFWwindow* window;
+    GLFWwindow* window = createWindow();
 
-    // Initialize the library
-    if (!glfwInit())
-        return -1;
-
-    // Create a windowed mode window and its OpenGL context
-    window = glfwCreateWindow(640, 640, "Test file", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    // Make the window's context current
-    glfwMakeContextCurrent(window);
+    Rect rectangle1  = {0,0,0.5,0.5};
 
     // Loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
@@ -47,11 +30,15 @@ int main()
         setBackgroundColor(0.0f,0.2f,0.5f);
 
         drawRectangle(0.0f, 0.0f, 0.5f, 0.5f);
-
         drawPolygonLines(0.0f, 0.0f, 0.1f, 2);
         drawRectangleLines(0.0f, 0.0f, 0.5, 0.5f);
 
+        drawPolygonLines(0.0f, 0.0f, 0.1f, 10);
+        drawRectangleRect(rectangle1);
+        //drawRectangleLines(0.0f, 0.0f, 0.5, 0.5f);
         //drawLine(-0.5f, -0.5f, 0.5f, 0.5f);
+        drawTriangleLines(0.0f, 0.0f, 0.1f, 0.1f);
+        //drawTriangle(0.0f, 0.0f, 0.1f, 0.1f);
 
 
         // Swap front and back buffers

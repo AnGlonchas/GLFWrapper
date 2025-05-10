@@ -52,6 +52,13 @@ typedef struct {
     float deltatime;
 } DeltaTime;
 
+typedef struct {
+    float x;
+    float y;
+    float w;
+    float h;
+} Rect;
+
 Shader LoadShader(const char *vertexPath, const char *fragPath) {
     // To do
 }
@@ -89,6 +96,7 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 */
 
+
 void DrawImage(char filename, int xx, int yy, int ww, int hh, int angle) {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, filename);
@@ -115,6 +123,27 @@ void DrawImage(char filename, int xx, int yy, int ww, int hh, int angle) {
     glEnd();
 }
 
+GLFWwindow* createWindow(){
+    GLFWwindow* window;
+
+    // Initialize the library
+    if (!glfwInit())
+        exit(1);
+
+    // Create a windowed mode window and its OpenGL context
+    window = glfwCreateWindow(640, 640, "Test file", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        exit(1);
+    }
+
+    // Make the window's context current
+    glfwMakeContextCurrent(window);
+
+    return window;
+}
+
 void setBackgroundColor(float r, float g, float b) {
     glClearColor(r,g,b,1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -132,9 +161,37 @@ void drawLine(float x1, float y1, float x2, float y2) {
     glEnd();
 }
 
+void drawTriangle(float x, float y, float w, float h) {
+    glBegin(GL_TRIANGLES);
+
+    glColor3f(1.0f,0.5f,0.0f);
+    glVertex2f(x,y);
+    glVertex2f(x-(w/2.0f), y-h);
+    glVertex2f(x+(w/2.0f), y-h);              
+    glEnd();
+}
+
+void drawTriangleLines(float x, float y, float w, float h) {
+    glBegin(GL_LINES);
+
+    glVertex2f(x  ,y  );
+    glVertex2f(x+(w/2.0f)  ,y-h);
+
+    glVertex2f(x  ,y  );
+    glVertex2f(x-(w/2.0f)  ,y-h);
+
+    glVertex2f(x+(w/2.0f)  ,y-h);
+    glVertex2f(x-(w/2.0f)  ,y-h);
+
+    glColor3f(1.0f,1.0f,1.0f);
+
+    glEnd();
+}
+
+
 void drawRectangle(float x, float y, float w, float h) {
     glBegin(GL_TRIANGLES);
-    glColor3f(1.0f,0.5f,0.0f);
+
     glVertex2f(x  ,y  );
     glVertex2f(x  ,y+h);
     glVertex2f(x+w,y+h);
@@ -143,10 +200,23 @@ void drawRectangle(float x, float y, float w, float h) {
     glVertex2f(x+w,y  );
     glVertex2f(x+w,y+h);
 
-    glColor3f(1.0f,1.0f,1.0f);
+    glEnd();
+}
+
+void drawRectangleRect(Rect rect) {
+    glBegin(GL_TRIANGLES);
+
+    glVertex2f(rect.x       ,rect.y  );
+    glVertex2f(rect.x       ,rect.y+rect.h);
+    glVertex2f(rect.x+rect.w,rect.y+rect.h);
+
+    glVertex2f(rect.x       ,rect.y  );
+    glVertex2f(rect.x+rect.w,rect.y  );
+    glVertex2f(rect.x+rect.w,rect.y+rect.h);
 
     glEnd();
 }
+
 
 void drawRectangleLines(float x, float y, float w, float h) {
     glBegin(GL_LINES);
