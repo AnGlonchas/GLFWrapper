@@ -20,9 +20,9 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 int main() {
     Window* window = createWindow(640, 640, "TestFile");
-    SetVsync(1);
+    setVsync(1);
 
-    Rect rectangle1  = {0,0,0.5,0.5};
+    Rect rect1  = {0,0,0.5,0.5};
     Color red = {1.0f, 0.0f, 0.0f, 1.0f};
 
     // Loop until the user closes the window
@@ -30,19 +30,19 @@ int main() {
         // Render here
         updateBackgroundColor(BLACK);
         if(isKeyDown(KEY_D, window)) {
-            rectangle1.x += 0.05f*getDeltaTime();
+            rect1.x += 0.03f*getDeltaTime();
         }
         if(isKeyDown(KEY_W, window)) {
-            rectangle1.y += 0.05f*getDeltaTime();
+            rect1.y += 0.03f*getDeltaTime();
         }
         if(isKeyDown(KEY_A, window)) {
-            rectangle1.x -= 0.05f*getDeltaTime();
+            rect1.x -= 0.03f*getDeltaTime();
         }
         if(isKeyDown(KEY_S, window)) {
-            rectangle1.y -= 0.05f*getDeltaTime();
+            rect1.y -= 0.03f*getDeltaTime();
         }
 
-        drawRectangleRect(rectangle1, LIGHTRED);
+        drawRectangleRect(rect1, BLUE);
 
         updateWindow(window);
     }

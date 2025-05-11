@@ -24,6 +24,9 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 #ifndef RAD2DEG
     #define RAD2DEG (180.0f/PI)
 #endif
+#ifndef MAX_CIRCLE_SIDES
+    #define MAX_CIRCLE_SIDES 30
+#endif
 
 typedef enum {
     KEY_NULL            = 0,        // Key: NULL, used for no key pressed
@@ -175,6 +178,13 @@ typedef struct {
 } Vector3;
 
 typedef struct {
+    float r;
+    float g;
+    float b;
+    float a;
+} Color;
+
+typedef struct {
     float x;
     float y;
     float w;
@@ -182,11 +192,18 @@ typedef struct {
 } Rect;
 
 typedef struct {
-    float r;
-    float g;
-    float b;
-    float a;
-} Color;
+    float x;
+    float y;
+    float radius;
+} Circle;
+
+typedef struct {
+    float x1;
+    float y1;
+    float x2;
+    float y2;
+    float width;
+} Line;
 
 typedef struct {
     GLFWwindow* window;
@@ -274,7 +291,7 @@ Window* createWindow(int width, int height, const char* name) {
         glfwTerminate();
         exit(1);
     }
-    printf("Welcome to GLFWrapper: \nscreen size: (%d, %d)", width, height);
+    printf("Welcome to GLFWrapper: \nscreen size: (%d, %d)\n", width, height);
     // Make the window's context current
     glfwMakeContextCurrent(window);
 
@@ -345,11 +362,22 @@ void updateBackgroundColor(Color color) {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void drawLine(float x1, float y1, float x2, float y2, Color color) {
+void drawLine(float x1, float y1, float x2, float y2, float wide, Color color) {
+    glLineWidth(wide);
     glBegin(GL_LINES);
     glColor4f(color.r, color.g, color.b, color.a);
     glVertex2f(x1, y1);
     glVertex2f(x2, y2);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnd();
+}
+
+void drawLineLine(Line line, Color color) {
+    glLineWidth(line.width);
+    glBegin(GL_LINES);
+    glColor4f(color.r, color.g, color.b, color.a);
+    glVertex2f(line.x1, line.y1);
+    glVertex2f(line.x2, line.y2);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
@@ -366,7 +394,20 @@ void drawTriangle(float x, float y, float w, float h, Color color) {
     glEnd();
 }
 
-void drawTriangleLines(float x, float y, float w, float h, Color color) {
+void drawTriangleRect(Rect rect, Color color) {
+    glBegin(GL_TRIANGLES);
+    glColor4f(color.r, color.g, color.b, color.a);
+
+    glVertex2f(rect.x,rect.y);
+    glVertex2f(rect.x-(rect.w/2.0f), rect.y-rect.h);
+    glVertex2f(rect.x+(rect.w/2.0f), rect.y-rect.h);
+    
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnd();
+}
+
+void drawTriangleLines(float x, float y, float w, float h, float wide, Color color) {
+    glLineWidth(wide);
     glBegin(GL_LINES);
     glColor4f(color.r, color.g, color.b, color.a);
     glVertex2f(x  ,y  );
@@ -415,7 +456,8 @@ void drawRectangleRect(Rect rect, Color color) {
 }
 
 
-void drawRectangleLines(float x, float y, float w, float h, Color color) {
+void drawRectangleLines(float x, float y, float w, float h, float wide, Color color) {
+    glLineWidth(wide);
     glBegin(GL_LINES);
     glColor4f(color.r, color.g, color.b, color.a);
 
@@ -435,7 +477,8 @@ void drawRectangleLines(float x, float y, float w, float h, Color color) {
     glEnd();
 }
 
-void drawPolygonLines(float centerx, float centery, float size, int sides, Color color) {
+void drawPolygonLines(float centerx, float centery, float size, int sides, float wide, Color color) {
+    glLineWidth(wide);
     glBegin(GL_LINES);
     glColor4f(color.r, color.g, color.b, color.a);
 
@@ -451,28 +494,86 @@ void drawPolygonLines(float centerx, float centery, float size, int sides, Color
     }
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
-
 }
 
-void drawPolygon(float centerx, float centery, float size, int sides, Color color) {
+void drawPolygon(float centerx, float centery, float radius, int sides, Color color) {
     glBegin(GL_TRIANGLE_FAN);
     glColor4f(color.r, color.g, color.b, color.a);
     glVertex2f(centerx, centery);
 
     for(int i = 0; i < sides; i++) {
         glVertex2f(
-            centerx + size*cos(i*DEG2RAD*( 360/sides) ),
-            centery - size*sin(i*DEG2RAD*( 360/sides) )
+            centerx + radius*cos(i*DEG2RAD*( 360/sides) ),
+            centery - radius*sin(i*DEG2RAD*( 360/sides) )
         );
         glVertex2f(
-            centerx + size*cos((i+1)*DEG2RAD*( 360/sides) ),
-            centery - size*sin((i+1)*DEG2RAD*( 360/sides) )
+            centerx + radius*cos((i+1)*DEG2RAD*( 360/sides) ),
+            centery - radius*sin((i+1)*DEG2RAD*( 360/sides) )
         );
     }
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
+}
 
+void drawPolygonCircle(Circle circle, int sides, Color color) {
+    glBegin(GL_TRIANGLE_FAN);
+    glColor4f(color.r, color.g, color.b, color.a);
+    glVertex2f(circle.x, circle.y);
+
+    for(int i = 0; i < sides; i++) {
+        glVertex2f(
+            circle.x + circle.radius*cos(i*DEG2RAD*( 360/sides) ),
+            circle.y - circle.radius*sin(i*DEG2RAD*( 360/sides) )
+        );
+        glVertex2f(
+            circle.x + circle.radius*cos((i+1)*DEG2RAD*( 360/sides) ),
+            circle.y - circle.radius*sin((i+1)*DEG2RAD*( 360/sides) )
+        );
+    }
+
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnd();
+}
+
+void drawCircle(float centerx, float centery, float radius, Color color) {
+    glBegin(GL_TRIANGLE_FAN);
+    glColor4f(color.r, color.g, color.b, color.a);
+    glVertex2f(centerx, centery);
+
+    for(int i = 0; i < MAX_CIRCLE_SIDES; i++) {
+        glVertex2f(
+            centerx + radius*cos(i*DEG2RAD*( 360/MAX_CIRCLE_SIDES) ),
+            centery - radius*sin(i*DEG2RAD*( 360/MAX_CIRCLE_SIDES) )
+        );
+        glVertex2f(
+            centerx + radius*cos((i+1)*DEG2RAD*( 360/MAX_CIRCLE_SIDES) ),
+            centery - radius*sin((i+1)*DEG2RAD*( 360/MAX_CIRCLE_SIDES) )
+        );
+    }
+
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnd();
+}
+
+void drawCircleCircle(Circle circle, Color color) {
+    glBegin(GL_TRIANGLE_FAN);
+    glColor4f(color.r, color.g, color.b, color.a);
+    glVertex2f(circle.x, circle.y);
+
+    for(int i = 0; i < MAX_CIRCLE_SIDES; i++) {
+        glVertex2f(
+            circle.x + circle.radius*cos(i*DEG2RAD*( 360/MAX_CIRCLE_SIDES) ),
+            circle.y - circle.radius*sin(i*DEG2RAD*( 360/MAX_CIRCLE_SIDES) )
+        );
+        glVertex2f(
+            circle.x + circle.radius*cos((i+1)*DEG2RAD*( 360/MAX_CIRCLE_SIDES) ),
+            circle.y - circle.radius*sin((i+1)*DEG2RAD*( 360/MAX_CIRCLE_SIDES) )
+        );
+    }
+
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnd();
 }
 
 #endif
