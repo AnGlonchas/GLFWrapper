@@ -15,12 +15,10 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 */
 
-#include <stdio.h>
 #include "glfwrapper.h"
 
 int main() {
     Window* window = createWindow(640, 640, "TestFile");
-    setVsync(1);
 
     Rect rect1  = {0,0,0.5,0.5};
     Color red = {1.0f, 0.0f, 0.0f, 1.0f};

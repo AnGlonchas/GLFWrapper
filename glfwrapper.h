@@ -2,6 +2,19 @@
 
 see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
+
+
+
+
+
+
+TO-DO:
+
+Collision Checkers:
+    Between rects
+    Between circles
+
+    between rects and circles
 */
 
 
@@ -294,6 +307,7 @@ Window* createWindow(int width, int height, const char* name) {
     printf("Welcome to GLFWrapper: \nscreen size: (%d, %d)\n", width, height);
     // Make the window's context current
     glfwMakeContextCurrent(window);
+    glfwSwapInterval(vsync);
 
     static Window mainwindow;
     mainwindow = (Window){window};
