@@ -1,11 +1,8 @@
 /*
 
+
+
 see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
-
-
-
-
-
 
 
 TO-DO:
@@ -13,15 +10,16 @@ TO-DO:
 Collision Checkers:
     Between rects
     Between circles
-
     between rects and circles
 */
 
 
-#ifndef GLFWRAPPER_H
+#ifndef GLFWRAPPER_H 
 
 #define GLFW_INCLUDE_NONE
+
 #include "include/GLFW/glfw3.h"
+
 #include <GL/gl.h>
 #include <math.h>
 #include <time.h>
@@ -166,7 +164,15 @@ typedef enum {
     MOUSE_BUTTON_EXTRA   = 4,       // Mouse button extra (advanced mouse device)
     MOUSE_BUTTON_FORWARD = 5,       // Mouse button forward (advanced mouse device)
     MOUSE_BUTTON_BACK    = 6,       // Mouse button back (advanced mouse device)
-} MouseButton;
+} MouseButtons;
+
+typedef enum {
+    BLEND_ADD = 0,
+    BLEND_SCREEN = 1,
+    BLEND_SUB = 2,
+    BLEND_ALPHA = 3,
+    BLEND_THING = 4,
+} BlendingModes;
 
 typedef struct {
     char *vertex;
@@ -219,8 +225,24 @@ typedef struct {
 } Line;
 
 typedef struct {
+    int width;
+    int height;
     GLFWwindow* window;
 } Window;
+
+typedef struct {
+    int fxaaSamples;
+    int fps;
+    int vsync;
+    int closeKey;
+
+    double deltaTime;
+    double currentTime;
+    double lastTime;
+
+    Vector2 mousePos;
+    Window window;
+} WrapperCore;
 
 const Color BLACK        = (Color){0.0f, 0.0f, 0.0f, 1.0f};
 const Color WHITE        = (Color){1.0f, 1.0f, 1.0f, 1.0f};
@@ -247,25 +269,55 @@ const Color DARKYELLOW   = (Color){0.5f, 0.5f, 0.0f, 1.0f};
 const Color DARKAQUA     = (Color){0.0f, 0.5f, 0.5f, 1.0f};
 const Color DARKMAGENTA  = (Color){0.5f, 0.0f, 0.5f, 1.0f};
 
-static int fps             = 60;
-static int closeKey        = KEY_ESCAPE;
-static int vsync           = 1;
-static double deltaTime    = 0;
-static double currentTime  = 0;
-static double lastTime     = 0;
+static WrapperCore CORE = {
+    .fxaaSamples = 0,
+    .fps = 60,
+    .vsync = 1,
+    .closeKey = KEY_ESCAPE,
+    .deltaTime = 1,
+    .currentTime = 0,
+    .lastTime = 0,
+    .mousePos = {0},
+    .window = {0},
+};
 
-Shader LoadShader(const char *vertexPath, const char *fragPath) { // To-do
+/*
+
+Miscelaneous
+
+*/
+
+Shader LoadShader(const char *vertexPath, const char *fragPath) { 
+    // To-do
     return (Shader){0};
 }
 
+int randInt(int min, int max) {
+    return rand() % ((max+1) -min) + min;
+}
+
+void limitI(int *num, int from, int to){
+        if((*num) < from) (*num) = from;
+        if((*num) > to) (*num) = to;
+}
+
+void limitF(float *num, float from, float to){
+        if((*num) < from) (*num) = from;
+        if((*num) > to) (*num) = to;
+}
+
+void limitD(double *num, double from, double to){
+        if((*num) < from) (*num) = from;
+        if((*num) > to) (*num) = to;
+}
 /*
 
 Input capture
 
 */
 
-int isKeyDown(int key, Window *window) {
-    int state = glfwGetKey(window->window, key);
+int isKeyDown(int key) {
+    int state = glfwGetKey(CORE.window.window, key);
 
     if(state == GLFW_PRESS) {
         return 1;
@@ -273,8 +325,68 @@ int isKeyDown(int key, Window *window) {
     return 0;
 }
 
+int isKeyReleased(int key) {
+    int state = glfwGetKey(CORE.window.window, key);
+
+    if(state == GLFW_RELEASE) {
+        return 1;
+    }
+    return 0;
+}
+
 void setCloseKey(int newKey) {
-    closeKey = newKey;
+    CORE.closeKey = newKey;
+}
+
+int isMouseButtonDown(int key) {
+    int state = glfwGetMouseButton(CORE.window.window, key);
+    if (state == GLFW_PRESS) {
+        return 1;
+    }
+    return 0;
+}
+
+int isMouseButtonReleased(int key) {
+    int state = glfwGetMouseButton(CORE.window.window, key);
+    if (state == GLFW_RELEASE) {
+        return 1;
+    }
+    return 0;
+}
+
+Vector2 getMousePos() {
+    double x, y;
+    glfwGetCursorPos(CORE.window.window, &x, &y);
+
+    CORE.mousePos.x = (float)x;
+    CORE.mousePos.y = (float)y;
+
+    return (Vector2){
+        (2*CORE.mousePos.x/CORE.window.width)-1, 
+        (-2*CORE.mousePos.y/CORE.window.height)+1
+    };
+}
+
+double getMouseX() {
+    double x, y;
+    glfwGetCursorPos(CORE.window.window, &x, &y);
+    //glfwSetInputMode(CORE.window.window, GLFW_CURSOR, GLFW_CURSOR_CAPTURED);
+    CORE.mousePos.x = (float)x;
+
+    return (2*CORE.mousePos.x/CORE.window.width)-1;
+}
+
+double getMouseY() {
+    double x, y;
+    glfwGetCursorPos(CORE.window.window, &x, &y);
+    //glfwSetInputMode(CORE.window.window, GLFW_CURSOR, GLFW_CURSOR_CAPTURED);
+    CORE.mousePos.y = (float)y;
+
+    return (-2*CORE.mousePos.y/CORE.window.height)+1;
+}
+
+Vector2 getMouseMotion() {
+// To-Do
 }
 
 /*
@@ -288,57 +400,57 @@ void forceProgramClose() {
     exit(1);
 }
 
-Window* createWindow(int width, int height, const char* name) {
+void setAntialiasingFactor(int factor) {
+    CORE.fxaaSamples = factor;
+}
 
+void createWindow(int width, int height, const char* name) {
+    srand(time(NULL));
     // Initialize the library
     if (!glfwInit()) {
-        fprintf(stderr, "Error: GLFW didnt load");
+        fprintf(stderr, "Error: GLFW didnt load (Error code 1)");
         exit(1);
     }
+
+    glfwWindowHint(GLFW_SAMPLES, CORE.fxaaSamples);
 
     // Create a windowed mode window and its OpenGL context
     GLFWwindow* window = glfwCreateWindow(width, height, name, NULL, NULL);
 
     if (!window) {
-        fprintf(stderr, "Error: Window didnt load");
+        fprintf(stderr, "Error: Window didnt load (Error code 2)");
         glfwTerminate();
         exit(1);
     }
     printf("Welcome to GLFWrapper: \nscreen size: (%d, %d)\n", width, height);
     // Make the window's context current
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(vsync);
+    glfwSwapInterval(CORE.vsync);
 
-    static Window mainwindow;
-    mainwindow = (Window){window};
-
-    return &mainwindow;
+    CORE.window = (Window){width, height, window};
 }
 
-void updateWindow(Window* window) {
+void updateWindow() {
     glfwPollEvents();
 
-    currentTime = glfwGetTime();
-    deltaTime = currentTime - lastTime;
-    lastTime = currentTime;
+    CORE.currentTime = glfwGetTime();
+    CORE.deltaTime = CORE.currentTime - CORE.lastTime;
+    CORE.lastTime = CORE.currentTime;
     
-    if(isKeyDown(closeKey, window)) {
+    if(isKeyDown(CORE.closeKey)) {
         forceProgramClose();
     }
 
-    glfwSwapBuffers(window->window);
+    glfwSwapBuffers(CORE.window.window);
 }
 
-void changeWindow(Window* window) {
-    glfwMakeContextCurrent(window->window);
-}
-
-int isWindowOpen(Window* window) {
-    return !glfwWindowShouldClose(window->window);
+int isWindowOpen() {
+    return !glfwWindowShouldClose(CORE.window.window);
 }
 
 void closeWindow() {
     glfwTerminate();
+    printf("GLFW Closed succesfully");
 }
 
 /*
@@ -348,20 +460,41 @@ Fps stuff
 */
 
 double getFPS() {
-    return 1/deltaTime;
+    return 1/CORE.deltaTime;
 }
 
 double getFrameTime() {
-    return deltaTime;
+    return CORE.deltaTime;
 }
 
 double getDeltaTime() {
-    return deltaTime * fps;
+    return CORE.deltaTime * CORE.fps;
 }
 
 void setVsync(int factor) {
-    vsync = factor;
-    glfwSwapInterval(vsync);
+    CORE.vsync = factor;
+    glfwSwapInterval(CORE.vsync);
+}
+
+/*
+
+Blending stuff
+
+*/
+
+void beginBlending(BlendingModes mode) {
+    glEnable(GL_BLEND);
+    switch(mode){
+        case BLEND_ADD: glBlendFunc(GL_ONE, GL_ONE); break;
+        case BLEND_SCREEN: glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO); break;
+        case BLEND_SUB: glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE); break;
+        case BLEND_ALPHA: glBlendFunc(GL_ZERO, GL_ONE); break;
+        case BLEND_THING: glBlendFunc(GL_SRC_ALPHA_SATURATE, GL_ONE); break;
+    }
+}
+
+void endBlending() {
+    glDisable(GL_BLEND);
 }
 
 /*
@@ -384,6 +517,7 @@ void drawLine(float x1, float y1, float x2, float y2, float wide, Color color) {
     glVertex2f(x2, y2);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
+    glLineWidth(1);
 }
 
 void drawLineLine(Line line, Color color) {
@@ -394,6 +528,7 @@ void drawLineLine(Line line, Color color) {
     glVertex2f(line.x2, line.y2);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
+    glLineWidth(1);
 }
 
 void drawTriangle(float x, float y, float w, float h, Color color) {
@@ -435,8 +570,8 @@ void drawTriangleLines(float x, float y, float w, float h, float wide, Color col
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
+    glLineWidth(1);
 }
-
 
 void drawRectangle(float x, float y, float w, float h, Color color) {
     glBegin(GL_TRIANGLES);
@@ -469,7 +604,6 @@ void drawRectangleRect(Rect rect, Color color) {
     glEnd();
 }
 
-
 void drawRectangleLines(float x, float y, float w, float h, float wide, Color color) {
     glLineWidth(wide);
     glBegin(GL_LINES);
@@ -489,6 +623,7 @@ void drawRectangleLines(float x, float y, float w, float h, float wide, Color co
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
+    glLineWidth(1);
 }
 
 void drawPolygonLines(float centerx, float centery, float size, int sides, float wide, Color color) {
@@ -508,6 +643,7 @@ void drawPolygonLines(float centerx, float centery, float size, int sides, float
     }
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
+    glLineWidth(1);
 }
 
 void drawPolygon(float centerx, float centery, float radius, int sides, Color color) {
@@ -528,6 +664,47 @@ void drawPolygon(float centerx, float centery, float radius, int sides, Color co
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
+}
+
+void drawPolygonRot(float centerx, float centery, float initAngle, float radius, int sides, Color color) {
+    glBegin(GL_TRIANGLE_FAN);
+    glColor4f(color.r, color.g, color.b, color.a);
+    glVertex2f(centerx, centery);
+
+    for(int i = 0; i < sides; i++) {
+        glVertex2f(
+            centerx + radius*cos(i*DEG2RAD*( 360/sides)+ DEG2RAD*initAngle ),
+            centery - radius*sin(i*DEG2RAD*( 360/sides)+ DEG2RAD*initAngle )
+        );
+        glVertex2f(
+            centerx + radius*cos((i+1)*DEG2RAD*( 360/sides) + DEG2RAD*initAngle),
+            centery - radius*sin((i+1)*DEG2RAD*( 360/sides) + DEG2RAD*initAngle)
+        );
+    }
+
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnd();
+}
+
+void drawPolygonRotLines(float centerx, float centery, float initAngle, float radius, int sides, float wide, Color color) {
+    glLineWidth(wide);
+    glBegin(GL_LINES);
+    glColor4f(color.r, color.g, color.b, color.a);
+
+    for(int i = 0; i < sides; i++) {
+        glVertex2f(
+            centerx + radius*cos(i*DEG2RAD*( 360/sides)+ DEG2RAD*initAngle ),
+            centery - radius*sin(i*DEG2RAD*( 360/sides)+ DEG2RAD*initAngle )
+        );
+        glVertex2f(
+            centerx + radius*cos((i+1)*DEG2RAD*( 360/sides) + DEG2RAD*initAngle),
+            centery - radius*sin((i+1)*DEG2RAD*( 360/sides) + DEG2RAD*initAngle)
+        );
+    }
+
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnd();
+    glLineWidth(1);
 }
 
 void drawPolygonCircle(Circle circle, int sides, Color color) {

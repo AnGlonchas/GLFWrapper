@@ -18,31 +18,36 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 #include "glfwrapper.h"
 
 int main() {
-    Window* window = createWindow(640, 640, "TestFile");
+    createWindow(640, 640, "Test");
 
-    Rect rect1  = {0,0,0.5,0.5};
-    Color red = {1.0f, 0.0f, 0.0f, 1.0f};
+    Vector2 mousepos = {0};
+    int ismousedown = 0;
+
+    Rect rect1 = {0.0f, 0.0f, 0.5f, 0.5f}; 
 
     // Loop until the user closes the window
-    while (isWindowOpen(window)) {
+    while (isWindowOpen()) {
         // Render here
-        updateBackgroundColor(BLACK);
-        if(isKeyDown(KEY_D, window)) {
+        updateBackgroundColor(DARKRED);
+        /*
+        if(isKeyDown(KEY_D)) {
             rect1.x += 0.03f*getDeltaTime();
         }
-        if(isKeyDown(KEY_W, window)) {
+        if(isKeyDown(KEY_W)) {
             rect1.y += 0.03f*getDeltaTime();
         }
-        if(isKeyDown(KEY_A, window)) {
+        if(isKeyDown(KEY_A)) {
             rect1.x -= 0.03f*getDeltaTime();
         }
-        if(isKeyDown(KEY_S, window)) {
+        if(isKeyDown(KEY_S)) {
             rect1.y -= 0.03f*getDeltaTime();
         }
+        */
 
-        drawRectangleRect(rect1, BLUE);
+        mousepos = getMousePos();
+        printf("%.2f\t%.2f\n", mousepos.x, mousepos.y);
 
-        updateWindow(window);
+        updateWindow();
     }
 
     closeWindow();
