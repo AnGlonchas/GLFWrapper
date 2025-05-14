@@ -20,7 +20,7 @@ int main() {
 ```
 
 # Install compiler
-Download [here](https://github.com/niXman/mingw-builds-binaries/releases/download/14.2.0-rt_v12-rev1/x86_64-14.2.0-release-win32-seh-msvcrt-rt_v12-rev1.7z) \
+Download [here](https://github.com/niXman/mingw-builds-binaries/releases/download/15.1.0-rt_v12-rev0/x86_64-15.1.0-release-posix-seh-ucrt-rt_v12-rev0.7z) \
 In the cmd type `setx path "%path%;c:/path/to/gcc.exe` \
 Reopen cmd and type `gcc --version` \
 You should see something like 
