@@ -20,32 +20,12 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 int main() {
     createWindow(640, 640, "Test");
 
-    Vector2 mousepos = {0};
-    int ismousedown = 0;
-
-    Rect rect1 = {0.0f, 0.0f, 0.5f, 0.5f}; 
-
     // Loop until the user closes the window
     while (isWindowOpen()) {
         // Render here
-        updateBackgroundColor(DARKRED);
-        /*
-        if(isKeyDown(KEY_D)) {
-            rect1.x += 0.03f*getDeltaTime();
-        }
-        if(isKeyDown(KEY_W)) {
-            rect1.y += 0.03f*getDeltaTime();
-        }
-        if(isKeyDown(KEY_A)) {
-            rect1.x -= 0.03f*getDeltaTime();
-        }
-        if(isKeyDown(KEY_S)) {
-            rect1.y -= 0.03f*getDeltaTime();
-        }
-        */
+        updateBackgroundColor(LIGHTAQUA);
 
-        mousepos = getMousePos();
-        printf("%.2f\t%.2f\n", mousepos.x, mousepos.y);
+        drawRectangle(-0.25f, 0.25f, 0.5f, 0.5f, DARKRED);
 
         updateWindow();
     }

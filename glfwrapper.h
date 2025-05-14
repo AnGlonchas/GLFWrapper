@@ -292,6 +292,12 @@ Shader LoadShader(const char *vertexPath, const char *fragPath) {
     return (Shader){0};
 }
 
+/*
+
+Math
+
+*/
+
 int randInt(int min, int max) {
     return rand() % ((max+1) -min) + min;
 }
@@ -310,6 +316,17 @@ void limitD(double *num, double from, double to){
         if((*num) < from) (*num) = from;
         if((*num) > to) (*num) = to;
 }
+
+void Vector2Add(Vector2 *vectorA, Vector2 vectorB) {
+    vectorA->x += vectorB.x;
+    vectorA->y += vectorB.y;
+}
+
+void Vector2Dot(Vector2 *vectorA, float dot) {
+    vectorA->x *= dot;
+    vectorA->y *= dot;
+}
+
 /*
 
 Input capture
@@ -362,7 +379,7 @@ Vector2 getMousePos() {
     CORE.mousePos.y = (float)y;
 
     return (Vector2){
-        (2*CORE.mousePos.x/CORE.window.width)-1, 
+        (2*CORE.mousePos.x/CORE.window.width)-1,
         (-2*CORE.mousePos.y/CORE.window.height)+1
     };
 }
@@ -387,6 +404,7 @@ double getMouseY() {
 
 Vector2 getMouseMotion() {
 // To-Do
+    return (Vector2){0,0};
 }
 
 /*
