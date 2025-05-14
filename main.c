@@ -15,36 +15,21 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 */
 
-
 #include "glfwrapper.h"
 
-int main()
-{
-    GLFWwindow* window = createWindow();
-
-    Rect rectangle1  = {0,0,0.5,0.0.5};
+int main() {
+    createWindow(640, 640, "Test");
 
     // Loop until the user closes the window
-    while (!glfwWindowShouldClose(window)) {
+    while (isWindowOpen()) {
         // Render here
-        setBackgroundColor(0.0f,0.2f,0.5f);
+        updateBackgroundColor(LIGHTAQUA);
 
+        drawRectangle(-0.25f, 0.25f, 0.5f, 0.5f, DARKRED);
 
-        drawPolygonLines(0.0f, 0.0f, 0.1f, 10);
-        drawRectangle(rectangle1);
-        //drawRectangleLines(0.0f, 0.0f, 0.5, 0.5f);
-        //drawLine(-0.5f, -0.5f, 0.5f, 0.5f);
-        drawTriangleLines(0.0f, 0.0f, 0.1f, 0.1f);
-        //drawTriangle(0.0f, 0.0f, 0.1f, 0.1f);
-
-
-        // Swap front and back buffers
-        glfwSwapBuffers(window);
-
-        // Poll for and process events
-        glfwPollEvents();
+        updateWindow();
     }
 
-    glfwTerminate();
+    closeWindow();
     return 0;
 }
