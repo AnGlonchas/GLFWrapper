@@ -19,14 +19,11 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 int main() {
     createWindow(640, 640, "Test");
-
     // Loop until the user closes the window
     while (isWindowOpen()) {
         // Render here
         updateBackgroundColor(LIGHTAQUA);
-
         drawRectangle(-0.25f, 0.25f, 0.5f, 0.5f, DARKRED);
-
         updateWindow();
     }
 

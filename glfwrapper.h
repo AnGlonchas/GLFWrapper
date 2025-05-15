@@ -292,6 +292,19 @@ Shader LoadShader(const char *vertexPath, const char *fragPath) {
     return (Shader){0};
 }
 
+static void printCoreInfo() {
+    printf(
+        "\nWelcome to GLFWrapper!\n"
+        "\nScreen size:\t(%d, %d)"
+        "\nTarget Fps:\t%d"
+        "\nVsync Factor:\t%d", 
+        CORE.window.width,
+        CORE.window.height,
+        CORE.fps,
+        CORE.vsync
+    );
+}
+
 /*
 
 Math
@@ -440,7 +453,7 @@ void createWindow(int width, int height, const char* name) {
         glfwTerminate();
         exit(1);
     }
-    printf("Welcome to GLFWrapper: \nscreen size: (%d, %d)\n", width, height);
+    printCoreInfo();
     // Make the window's context current
     glfwMakeContextCurrent(window);
     glfwSwapInterval(CORE.vsync);
@@ -533,7 +546,7 @@ void drawLine(float x1, float y1, float x2, float y2, float wide, Color color) {
     glColor4f(color.r, color.g, color.b, color.a);
     glVertex2f(x1, y1);
     glVertex2f(x2, y2);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
     glLineWidth(1);
 }
@@ -544,7 +557,7 @@ void drawLineLine(Line line, Color color) {
     glColor4f(color.r, color.g, color.b, color.a);
     glVertex2f(line.x1, line.y1);
     glVertex2f(line.x2, line.y2);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
     glLineWidth(1);
 }
@@ -556,8 +569,7 @@ void drawTriangle(float x, float y, float w, float h, Color color) {
     glVertex2f(x,y);
     glVertex2f(x-(w/2.0f), y-h);
     glVertex2f(x+(w/2.0f), y-h);
-    
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
 }
 
@@ -568,8 +580,7 @@ void drawTriangleRect(Rect rect, Color color) {
     glVertex2f(rect.x,rect.y);
     glVertex2f(rect.x-(rect.w/2.0f), rect.y-rect.h);
     glVertex2f(rect.x+(rect.w/2.0f), rect.y-rect.h);
-    
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
 }
 
@@ -586,7 +597,6 @@ void drawTriangleLines(float x, float y, float w, float h, float wide, Color col
     glVertex2f(x+(w/2.0f)  ,y-h);
     glVertex2f(x-(w/2.0f)  ,y-h);
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
     glLineWidth(1);
 }
@@ -602,7 +612,6 @@ void drawRectangle(float x, float y, float w, float h, Color color) {
     glVertex2f(x+w,y  );
     glVertex2f(x+w,y-h);
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -618,7 +627,6 @@ void drawRectangleRect(Rect rect, Color color) {
     glVertex2f(rect.x+rect.w,rect.y  );
     glVertex2f(rect.x+rect.w,rect.y-rect.h);
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -639,7 +647,6 @@ void drawRectangleLines(float x, float y, float w, float h, float wide, Color co
     glVertex2f(x  ,y-h);
     glVertex2f(x  ,y  );
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
     glLineWidth(1);
 }
@@ -659,7 +666,7 @@ void drawPolygonLines(float centerx, float centery, float size, int sides, float
             centery - size*sin((i+1)*DEG2RAD*( 360/sides) )
         );
     }
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
     glLineWidth(1);
 }
@@ -680,7 +687,6 @@ void drawPolygon(float centerx, float centery, float radius, int sides, Color co
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -700,7 +706,6 @@ void drawPolygonRot(float centerx, float centery, float initAngle, float radius,
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -720,7 +725,6 @@ void drawPolygonRotLines(float centerx, float centery, float initAngle, float ra
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
     glLineWidth(1);
 }
@@ -741,7 +745,6 @@ void drawPolygonCircle(Circle circle, int sides, Color color) {
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -761,7 +764,6 @@ void drawCircle(float centerx, float centery, float radius, Color color) {
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -781,7 +783,6 @@ void drawCircleCircle(Circle circle, Color color) {
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
