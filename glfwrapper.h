@@ -297,7 +297,7 @@ static void printCoreInfo() {
         "\nWelcome to GLFWrapper!\n"
         "\nScreen size:\t(%d, %d)"
         "\nTarget Fps:\t%d"
-        "\nVsync Factor:\t%d", 
+        "\nVsync Factor:\t%d\n", 
         CORE.window.width,
         CORE.window.height,
         CORE.fps,
@@ -313,6 +313,10 @@ Math
 
 int randInt(int min, int max) {
     return rand() % ((max+1) -min) + min;
+}
+
+float distance(Vector2 vecA, Vector2 vecB) {
+    return sqrt(pow(vecA.x - vecB.x, 2) + pow(vecA.y - vecB.y, 2));
 }
 
 void limitI(int *num, int from, int to){
@@ -788,7 +792,7 @@ void drawCircleCircle(Circle circle, Color color) {
 }
 
 //Collision checkers:
-int CheckCollisionRectCircle(Rect rect, Circle circle) {
+int checkCollisionRectCircle(Rect rect, Circle circle) {
     // Considerar que rect.y es la parte SUPERIOR del rectángulo
     // y rect.h es la altura hacia ABAJO (coordenadas OpenGL)
     float rectLeft = rect.x;
@@ -808,7 +812,7 @@ int CheckCollisionRectCircle(Rect rect, Circle circle) {
     return distanceSquared <= (circle.radius * circle.radius);
 }
 
-int CheckCollisionCircles(Circle a, Circle b) {
+int checkCollisionCircles(Circle a, Circle b) {
     float dx = a.x - b.x;
     float dy = a.y - b.y;
     float distanceSquared = dx * dx + dy * dy;
@@ -817,33 +821,13 @@ int CheckCollisionCircles(Circle a, Circle b) {
     return distanceSquared <= (radiusSum * radiusSum);
 }
 
-int CheckCollisionRects(Rect a, Rect b) {
+int checkCollisionRects(Rect rectA, Rect rectB) {
     return (
-        a.x < b.x + b.w &&
-        a.x + a.w > b.x &&
-        a.y < b.y + b.h &&
-        a.y + a.h > b.y
+        rectA.x < rectB.x + rectB.w &&
+        rectA.x + rectA.w > rectB.x &&
+        rectA.y < rectB.y + rectB.h &&
+        rectA.y + rectA.h > rectB.y
     );
 }
-
-
-#define MAX_KEYS 512
-
-static unsigned char previousKeyState[MAX_KEYS] = {0};
-
-//sleep function with operative sistem detector
-#if defined(_WIN32) || defined(_WIN64)
-    #include <windows.h>
-    void sleep(int milisegundos) {
-        Sleep(milisegundos);  // Windows usa milisegundos
-    }
-#else
-    #include <unistd.h>
-    void sleep1(int milisegundos) {
-        usleep(milisegundos * 1000);  // usleep usa microsegundos
-    }
-#endif
-
-
 
 #endif
