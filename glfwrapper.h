@@ -459,7 +459,8 @@ void createWindow(int width, int height, const char* name) {
     glfwSwapInterval(CORE.vsync);
 
     CORE.window = (Window){width, height, window};
-}
+    
+} 
 
 void updateWindow() {
     glfwPollEvents();
@@ -785,5 +786,64 @@ void drawCircleCircle(Circle circle, Color color) {
 
     glEnd();
 }
+
+//Collision checkers:
+int CheckCollisionRectCircle(Rect rect, Circle circle) {
+    // Considerar que rect.y es la parte SUPERIOR del rectángulo
+    // y rect.h es la altura hacia ABAJO (coordenadas OpenGL)
+    float rectLeft = rect.x;
+    float rectRight = rect.x + rect.w;
+    float rectTop = rect.y;  // Parte superior
+    float rectBottom = rect.y - rect.h;  // Parte inferior
+    
+    // Encontrar el punto más cercano en el rectángulo al círculo
+    float closestX = fmaxf(rectLeft, fminf(circle.x, rectRight));
+    float closestY = fmaxf(rectBottom, fminf(circle.y, rectTop));
+    
+    // Calcular distancia al cuadrado
+    float dx = circle.x - closestX;
+    float dy = circle.y - closestY;
+    float distanceSquared = (dx * dx) + (dy * dy);
+    
+    return distanceSquared <= (circle.radius * circle.radius);
+}
+
+int CheckCollisionCircles(Circle a, Circle b) {
+    float dx = a.x - b.x;
+    float dy = a.y - b.y;
+    float distanceSquared = dx * dx + dy * dy;
+    float radiusSum = a.radius + b.radius;
+
+    return distanceSquared <= (radiusSum * radiusSum);
+}
+
+int CheckCollisionRects(Rect a, Rect b) {
+    return (
+        a.x < b.x + b.w &&
+        a.x + a.w > b.x &&
+        a.y < b.y + b.h &&
+        a.y + a.h > b.y
+    );
+}
+
+
+#define MAX_KEYS 512
+
+static unsigned char previousKeyState[MAX_KEYS] = {0};
+
+//sleep function with operative sistem detector
+#if defined(_WIN32) || defined(_WIN64)
+    #include <windows.h>
+    void sleep(int milisegundos) {
+        Sleep(milisegundos);  // Windows usa milisegundos
+    }
+#else
+    #include <unistd.h>
+    void sleep1(int milisegundos) {
+        usleep(milisegundos * 1000);  // usleep usa microsegundos
+    }
+#endif
+
+
 
 #endif
