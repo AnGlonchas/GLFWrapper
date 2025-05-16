@@ -5,6 +5,7 @@ gcc pong.c -o programa -I/opt/homebrew/include -L/opt/homebrew/lib -lglfw -frame
 ./programa
 
 */
+Color array = {{0.0f, 0.0f, 0.0f, 1.0f}};
 
 int main() {
     createWindow(800, 800, "Pong");
@@ -13,15 +14,15 @@ int main() {
     Rect paddleLeft = {-0.95f, 0.0f, 0.05f, 0.4f};  // y = centro, h = altura total
     Rect paddleRight = {0.90f, 0.0f, 0.05f, 0.4f};
     Circle ball = {0, 0, 0.04f};
-    float ballSpeedX = 0.01f;
-    float ballSpeedY = 0.01f;
+    float ballSpeedX = 0.02f;
+    float ballSpeedY = 0.005f;
     float paddleSpeed = 0.02f;
     int scoreL = 0;
     int scoreR = 0;
+    int x = 1; //color de la pelota en COLOR_ARRAY[]
 
     while (isWindowOpen()) {
         updateBackgroundColor(BLACK);
-        
         
         // Movimiento de paletas con límites
         if (isKeyDown(KEY_W)) paddleLeft.y += paddleSpeed;
@@ -41,16 +42,27 @@ int main() {
         if(CheckCollisionRectCircle(paddleLeft, ball) && ballSpeedX < 0) {
             ballSpeedX *= -1;
             printf("Colisión izquierda\n");
+            x = (rand() % 19)+1;
         }
         
         if(CheckCollisionRectCircle(paddleRight, ball) && ballSpeedX > 0) {
             ballSpeedX *= -1;
             printf("Colisión derecha\n");
+            x = (rand() % 19)+1;
         }
 
         // Colisión con bordes superior e inferior
         if(ball.y + ball.radius > 1.0f || ball.y - ball.radius < -1.0f) {
             ballSpeedY *= -1;
+            if (ballSpeedX > 0 && ballSpeedX < 0.025){
+                ballSpeedX += 0.002;
+                ballSpeedY += 0.002;
+            }
+            if (ballSpeedX < 0 && ballSpeedX < -0.025){
+                ballSpeedX -= 0.002;
+                ballSpeedY -= 0.002;
+            }
+
         }
 
         // Reiniciar si sale por los lados
@@ -69,7 +81,7 @@ int main() {
 
         drawRectangleRect(paddleLeft, WHITE);
         drawRectangleRect(paddleRight, WHITE);
-        drawCircleCircle(ball, WHITE);
+        drawCircleCircle(ball, COLOR_ARRAY[x]);
 
         updateWindow();
     }
