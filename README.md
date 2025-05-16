@@ -39,7 +39,7 @@ git clone https://github.com/AnGlonchas/GLFWrapper
 ```
 Or download the zip directly into the desired directory 
 
-# Run
+# Run for windows
 In the main.c directory, open a cmd, then type `run` 
 
 # How to use in MacOS
