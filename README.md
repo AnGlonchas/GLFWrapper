@@ -39,6 +39,15 @@ git clone https://github.com/AnGlonchas/GLFWrapper
 ```
 Or download the zip directly into the desired directory 
 
+# Project Structure
+/ProjectName
+├── lib/
+    ├── libglfw3.a
+├── include/
+    ├── GL/gl.h
+    ├── GLFW/glfw3.h
+├── main.c
+
 # Run for windows
 In the main.c directory, open a cmd, then type `run` 
 
