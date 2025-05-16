@@ -60,7 +60,9 @@ gcc main.c -Wall -o a.exe -I./include/ -L./lib/ -lglfw3 -lopengl32 -lgdi32
 # Run for windows
 In the main.c directory, open a cmd, then type `run` 
 
-# How to use in MacOS
+# MacOS
+
+## How to use in MacOS
 If you are using a Mac, you have to use the same files that we have given u, but changing de "libglfw3.a" in the "lib" folder instaling the GLFW Mac's version [here](https://www.glfw.org/download.html) and changing the "libglfw3.a" to the current project instead of the others files in "lib", this way, you must play the game if you follow the next steps in "Terminal":
 
 Install Homebrew
@@ -71,7 +73,7 @@ Install glfw
 ```
 brew install glfw
 ```
-Go to the "GLFWrapper" folder using "cd file_x" and use this code:
+# Go to the "GLFWrapper" folder using "cd file_x" and use this code:
 ```
 gcc pong.c -o programa \
   -I/opt/homebrew/include \
