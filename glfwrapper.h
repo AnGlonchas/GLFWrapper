@@ -830,4 +830,9 @@ int checkCollisionRects(Rect rectA, Rect rectB) {
     );
 }
 
+void chance_name(char cname[]){
+
+    glfwSetWindowTitle(CORE.window.window, cname);
+}
+
 #endif

@@ -29,6 +29,7 @@ void drawEffect(Circle *ball) {
 
 int main() {
     createWindow(700, 700, "Pong");
+    char wname[100];
 
     Color veryDarkBlue = {0.0f, 0.0f, 0.1f, 1.0f};
 
@@ -44,7 +45,9 @@ int main() {
 
     while (isWindowOpen()) {
         updateBackgroundColor(veryDarkBlue);
+
         
+
         // Movimiento de paletas con límites
         if (isKeyDown(KEY_W))    paddleLeft.y += paddleSpeed*getDeltaTime();
         if (isKeyDown(KEY_S))    paddleLeft.y -= paddleSpeed*getDeltaTime();
@@ -69,7 +72,10 @@ int main() {
             // Get Y velocity in function of the angle of the collision
             ballSpeed.y = (ball.y - paddleCenter)/15;
             printf("Colision izquierda\n");
+            
         }
+
+        
         
         if(checkCollisionRectCircle(paddleRight, ball) && ballSpeed.x > 0) {
             float paddleCenter = paddleRight.y - (paddleRight.h/2);
@@ -77,19 +83,12 @@ int main() {
             // Get Y velocity in function of the angle of the collision
             ballSpeed.y = (ball.y - paddleCenter)/15;
             printf("Colision derecha\n");
+            
         }
 
         // Colisión con bordes superior e inferior
         if(ball.y + ball.radius > 1.0f || ball.y - ball.radius < -1.0f) {
             ballSpeed.y *= -1;
-            if(ball.y + ball.radius > 1.0f ){
-                ball.y -= 0.05;
-            }
-            else{
-                ball.y += 0.05;
-            }
-            
-            
         }
 
         // Reiniciar si sale por los lados
@@ -100,9 +99,13 @@ int main() {
             ballSpeed.y = 0.01f * (rand() % 2 ? 1 : -1);
             if(ball.x - ball.radius < -1.0f){
                 scoreL += 1;
+                sprintf(wname, "Fallos: Izquierda: %d Derecha: %d", scoreL, scoreR);
+                chance_name(wname);
             }
             else{
                 scoreR += 1;
+                sprintf(wname, "Fallos: Izquierda: %d Derecha: %d", scoreL, scoreR);
+                chance_name(wname);
             }
         }
         // Blending mode, mixes the colors together
