@@ -1,3 +1,4 @@
+
 #include "glfwrapper.h"
 
 /*
@@ -28,11 +29,11 @@ void drawEffect(Circle *ball) {
 }
 
 int main() {
+
     FILE* score_file = fopen("score_file.txt","a");
     if(!score_file){
         printf("Error con archivo");
     }
-
 
     createWindow(700, 700, "Pong");
     char wname[100];
@@ -68,8 +69,10 @@ int main() {
         ball.x += ballSpeed.x*getDeltaTime();
         ball.y += ballSpeed.y*getDeltaTime();
 
+
         //Make the ball faster as time passes
         Vector2Dot(&ballSpeed, 1.0005f);
+
 
         // Colisión con paletas
         if(checkCollisionRectCircle(paddleLeft, ball) && ballSpeed.x < 0) {
@@ -98,20 +101,23 @@ int main() {
         }
 
         // Reiniciar si sale por los lados
-        if(ball.x - ball.radius < -1.0f || ball.x + ball.radius > 1.0f) {
+        if(ball.x - ball.radius <= -1.0f || ball.x + ball.radius >= 1.0f) {
             ball.x = 0;
             ball.y = 0;
             ballSpeed.x = 0.01f * (rand() % 2 ? 1 : -1);
             ballSpeed.y = 0.01f * (rand() % 2 ? 1 : -1);
-            if(ball.x - ball.radius < -1.0f){
-                scoreL += 1;
-                sprintf(wname, "Fallos: Izquierda: %d Derecha: %d", scoreL, scoreR);
-                chance_name(wname);  
-            }
-            else{
+
+
+            if(ballSpeed.x < 0.0f) {
                 scoreR += 1;
-                sprintf(wname, "Fallos: Izquierda: %d Derecha: %d", scoreL, scoreR);
-                chance_name(wname);
+                sprintf(wname, "Pong, Puntos: Izquierda: %d Derecha: %d", scoreL, scoreR);
+                changeWindowName(wname);
+            }
+            if(ballSpeed.x > 0.0f) {
+                scoreL += 1;
+                sprintf(wname, "Pong, Puntos: Izquierda: %d Derecha: %d", scoreL, scoreR);
+                changeWindowName(wname);
+
             }
         }
         // Blending mode, mixes the colors together

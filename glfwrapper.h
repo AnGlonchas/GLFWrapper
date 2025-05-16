@@ -5,12 +5,7 @@
 see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 
-TO-DO:
 
-Collision Checkers:
-    Between rects
-    Between circles
-    between rects and circles
 */
 
 
@@ -319,6 +314,19 @@ Shader LoadShader(const char *vertexPath, const char *fragPath) {
     return (Shader){0};
 }
 
+static void printCoreInfo() {
+    printf(
+        "\nWelcome to GLFWrapper!\n"
+        "\nScreen size:\t(%d, %d)"
+        "\nTarget Fps:\t%d"
+        "\nVsync Factor:\t%d\n", 
+        CORE.window.width,
+        CORE.window.height,
+        CORE.fps,
+        CORE.vsync
+    );
+}
+
 /*
 
 Math
@@ -327,6 +335,10 @@ Math
 
 int randInt(int min, int max) {
     return rand() % ((max+1) -min) + min;
+}
+
+float distance(Vector2 vecA, Vector2 vecB) {
+    return sqrt(pow(vecA.x - vecB.x, 2) + pow(vecA.y - vecB.y, 2));
 }
 
 void limitI(int *num, int from, int to){
@@ -467,7 +479,7 @@ void createWindow(int width, int height, const char* name) {
         glfwTerminate();
         exit(1);
     }
-    printf("Welcome to GLFWrapper: \nscreen size: (%d, %d)\n", width, height);
+    printCoreInfo();
     // Make the window's context current
     glfwMakeContextCurrent(window);
     glfwSwapInterval(CORE.vsync);
@@ -488,6 +500,10 @@ void updateWindow() {
     }
 
     glfwSwapBuffers(CORE.window.window);
+}
+
+void changeWindowName(char cname[]){
+    glfwSetWindowTitle(CORE.window.window, cname);
 }
 
 int isWindowOpen() {
@@ -561,7 +577,7 @@ void drawLine(float x1, float y1, float x2, float y2, float wide, Color color) {
     glColor4f(color.r, color.g, color.b, color.a);
     glVertex2f(x1, y1);
     glVertex2f(x2, y2);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
     glLineWidth(1);
 }
@@ -572,7 +588,7 @@ void drawLineLine(Line line, Color color) {
     glColor4f(color.r, color.g, color.b, color.a);
     glVertex2f(line.x1, line.y1);
     glVertex2f(line.x2, line.y2);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
     glLineWidth(1);
 }
@@ -584,8 +600,7 @@ void drawTriangle(float x, float y, float w, float h, Color color) {
     glVertex2f(x,y);
     glVertex2f(x-(w/2.0f), y-h);
     glVertex2f(x+(w/2.0f), y-h);
-    
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
 }
 
@@ -596,8 +611,7 @@ void drawTriangleRect(Rect rect, Color color) {
     glVertex2f(rect.x,rect.y);
     glVertex2f(rect.x-(rect.w/2.0f), rect.y-rect.h);
     glVertex2f(rect.x+(rect.w/2.0f), rect.y-rect.h);
-    
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
 }
 
@@ -614,7 +628,6 @@ void drawTriangleLines(float x, float y, float w, float h, float wide, Color col
     glVertex2f(x+(w/2.0f)  ,y-h);
     glVertex2f(x-(w/2.0f)  ,y-h);
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
     glLineWidth(1);
 }
@@ -630,7 +643,6 @@ void drawRectangle(float x, float y, float w, float h, Color color) {
     glVertex2f(x+w,y  );
     glVertex2f(x+w,y-h);
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -646,7 +658,6 @@ void drawRectangleRect(Rect rect, Color color) {
     glVertex2f(rect.x+rect.w,rect.y  );
     glVertex2f(rect.x+rect.w,rect.y-rect.h);
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -667,7 +678,6 @@ void drawRectangleLines(float x, float y, float w, float h, float wide, Color co
     glVertex2f(x  ,y-h);
     glVertex2f(x  ,y  );
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
     glLineWidth(1);
 }
@@ -687,7 +697,7 @@ void drawPolygonLines(float centerx, float centery, float size, int sides, float
             centery - size*sin((i+1)*DEG2RAD*( 360/sides) )
         );
     }
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
     glEnd();
     glLineWidth(1);
 }
@@ -708,7 +718,6 @@ void drawPolygon(float centerx, float centery, float radius, int sides, Color co
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -728,7 +737,6 @@ void drawPolygonRot(float centerx, float centery, float initAngle, float radius,
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -748,7 +756,6 @@ void drawPolygonRotLines(float centerx, float centery, float initAngle, float ra
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
     glLineWidth(1);
 }
@@ -769,7 +776,6 @@ void drawPolygonCircle(Circle circle, int sides, Color color) {
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -789,7 +795,6 @@ void drawCircle(float centerx, float centery, float radius, Color color) {
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -809,12 +814,11 @@ void drawCircleCircle(Circle circle, Color color) {
         );
     }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
 //Collision checkers:
-int CheckCollisionRectCircle(Rect rect, Circle circle) {
+int checkCollisionRectCircle(Rect rect, Circle circle) {
     // Considerar que rect.y es la parte SUPERIOR del rectángulo
     // y rect.h es la altura hacia ABAJO (coordenadas OpenGL)
     float rectLeft = rect.x;
@@ -834,7 +838,7 @@ int CheckCollisionRectCircle(Rect rect, Circle circle) {
     return distanceSquared <= (circle.radius * circle.radius);
 }
 
-int CheckCollisionCircles(Circle a, Circle b) {
+int checkCollisionCircles(Circle a, Circle b) {
     float dx = a.x - b.x;
     float dy = a.y - b.y;
     float distanceSquared = dx * dx + dy * dy;
@@ -843,33 +847,13 @@ int CheckCollisionCircles(Circle a, Circle b) {
     return distanceSquared <= (radiusSum * radiusSum);
 }
 
-int CheckCollisionRects(Rect a, Rect b) {
+int checkCollisionRects(Rect rectA, Rect rectB) {
     return (
-        a.x < b.x + b.w &&
-        a.x + a.w > b.x &&
-        a.y < b.y + b.h &&
-        a.y + a.h > b.y
+        rectA.x < rectB.x + rectB.w &&
+        rectA.x + rectA.w > rectB.x &&
+        rectA.y < rectB.y + rectB.h &&
+        rectA.y + rectA.h > rectB.y
     );
 }
-
-
-#define MAX_KEYS 512
-
-static unsigned char previousKeyState[MAX_KEYS] = {0};
-
-//sleep function with operative sistem detector
-#if defined(_WIN32) || defined(_WIN64)
-    #include <windows.h>
-    void sleep(int milisegundos) {
-        Sleep(milisegundos);  // Windows usa milisegundos
-    }
-#else
-    #include <unistd.h>
-    void sleep1(int milisegundos) {
-        usleep(milisegundos * 1000);  // usleep usa microsegundos
-    }
-#endif
-
-
 
 #endif
