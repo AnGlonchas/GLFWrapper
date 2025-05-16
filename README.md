@@ -93,5 +93,14 @@ After that, just type the next executable and you would be able to play it:
 On terminal type:
 ```
 sudo apt install xorg-dev
+sudo apt install libglfw3 libglfw3-dev
+```
+Once you have downloaded the files, proceed to compile and run the program with the following commands.
+```
+gcc pong.c -Wall -o a.out -I./include/ -L./lib/ -lglfw3 -lopengl32 -lgdi32
+```
+Now you can run the program
+```
+./a.out
 ```
 
