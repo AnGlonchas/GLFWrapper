@@ -19,7 +19,7 @@ int main() {
 }
 ```
 
-# Install compiler
+# Install compiler for windows
 Download [here](https://github.com/niXman/mingw-builds-binaries/releases/download/15.1.0-rt_v12-rev0/x86_64-15.1.0-release-posix-seh-ucrt-rt_v12-rev0.7z) \
 In the cmd type `setx path "%path%;c:/path/to/gcc.exe` \
 Reopen cmd and type `gcc --version` \
@@ -39,7 +39,18 @@ git clone https://github.com/AnGlonchas/GLFWrapper
 ```
 Or download the zip directly into the desired directory 
 
-# Run
+# Project Structure
+```
+/ProjectName
+├── lib/
+    ├── libglfw3.a
+├── include/
+    ├── GL/gl.h
+    ├── GLFW/glfw3.h
+├── main.c
+```
+
+# Run for windows
 In the main.c directory, open a cmd, then type `run` 
 
 # How to use in MacOS
