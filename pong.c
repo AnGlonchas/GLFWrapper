@@ -82,6 +82,14 @@ int main() {
         // Colisión con bordes superior e inferior
         if(ball.y + ball.radius > 1.0f || ball.y - ball.radius < -1.0f) {
             ballSpeed.y *= -1;
+            if(ball.y + ball.radius > 1.0f ){
+                ball.y -= 0.05;
+            }
+            else{
+                ball.y += 0.05;
+            }
+            
+            
         }
 
         // Reiniciar si sale por los lados
