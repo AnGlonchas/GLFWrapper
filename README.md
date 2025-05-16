@@ -73,7 +73,7 @@ Install glfw
 ```
 brew install glfw
 ```
-# Go to the "GLFWrapper" folder using "cd file_x" and use this code:
+## Go to the "GLFWrapper" folder using "cd file_x" and use this code:
 ```
 gcc pong.c -o programa \
   -I/opt/homebrew/include \
