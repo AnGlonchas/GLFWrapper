@@ -19,7 +19,7 @@ int main() {
 }
 ```
 
-# Install compiler
+# Install compiler for windows
 Download [here](https://github.com/niXman/mingw-builds-binaries/releases/download/15.1.0-rt_v12-rev0/x86_64-15.1.0-release-posix-seh-ucrt-rt_v12-rev0.7z) \
 In the cmd type `setx path "%path%;c:/path/to/gcc.exe` \
 Reopen cmd and type `gcc --version` \
