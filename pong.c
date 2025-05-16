@@ -1,3 +1,4 @@
+
 #include "glfwrapper.h"
 
 /*
@@ -28,7 +29,14 @@ void drawEffect(Circle *ball) {
 }
 
 int main() {
+
+    FILE* score_file = fopen("score_file.txt","a");
+    if(!score_file){
+        printf("Error con archivo");
+    }
+
     createWindow(700, 700, "Pong");
+    char wname[100];
 
     Color veryDarkBlue = {0.0f, 0.0f, 0.1f, 1.0f};
 
@@ -44,7 +52,9 @@ int main() {
 
     while (isWindowOpen()) {
         updateBackgroundColor(veryDarkBlue);
+
         
+
         // Movimiento de paletas con límites
         if (isKeyDown(KEY_W))    paddleLeft.y += paddleSpeed*getDeltaTime();
         if (isKeyDown(KEY_S))    paddleLeft.y -= paddleSpeed*getDeltaTime();
@@ -59,8 +69,10 @@ int main() {
         ball.x += ballSpeed.x*getDeltaTime();
         ball.y += ballSpeed.y*getDeltaTime();
 
+
         //Make the ball faster as time passes
         Vector2Dot(&ballSpeed, 1.001f);
+
 
         // Colisión con paletas
         if(checkCollisionRectCircle(paddleLeft, ball) && ballSpeed.x < 0) {
@@ -69,7 +81,10 @@ int main() {
             // Get Y velocity in function of the angle of the collision
             ballSpeed.y = (ball.y - paddleCenter)/15;
             printf("Colision izquierda\n");
+            
         }
+
+        
         
         if(checkCollisionRectCircle(paddleRight, ball) && ballSpeed.x > 0) {
             float paddleCenter = paddleRight.y - (paddleRight.h/2);
@@ -77,24 +92,38 @@ int main() {
             // Get Y velocity in function of the angle of the collision
             ballSpeed.y = (ball.y - paddleCenter)/15;
             printf("Colision derecha\n");
+            
         }
 
         // Colisión con bordes superior e inferior
         if(ball.y + ball.radius > 1.0f || ball.y - ball.radius < -1.0f) {
             ballSpeed.y *= -1;
+            if(ball.y + ball.radius > 1.0f ){
+                ball.y = 1.0f - 2*ball.radius;
+            }
+            else{
+                ball.y = -1.0f + 2*ball.radius;
+            }
         }
 
         // Reiniciar si sale por los lados
-        if(ball.x - ball.radius < -1.0f || ball.x + ball.radius > 1.0f) {
+        if(ball.x - ball.radius <= -1.0f || ball.x + ball.radius >= 1.0f) {
             ball.x = 0;
             ball.y = 0;
             ballSpeed.x = 0.01f * (rand() % 2 ? 1 : -1);
             ballSpeed.y = 0.01f * (rand() % 2 ? 1 : -1);
-            if(ball.x - ball.radius < -1.0f){
-                scoreL += 1;
-            }
-            else{
+
+
+            if(ballSpeed.x < 0.0f) {
                 scoreR += 1;
+                sprintf(wname, "Pong, Puntos: Izquierda: %d Derecha: %d", scoreL, scoreR);
+                changeWindowName(wname);
+            }
+            if(ballSpeed.x > 0.0f) {
+                scoreL += 1;
+                sprintf(wname, "Pong, Puntos: Izquierda: %d Derecha: %d", scoreL, scoreR);
+                changeWindowName(wname);
+
             }
         }
         // Blending mode, mixes the colors together
@@ -109,5 +138,6 @@ int main() {
     }
 
     closeWindow();
+    fprintf(score_file, "Last game's scores: %d - %d\n", scoreL, scoreR);
     return 0;
 }
