@@ -264,6 +264,33 @@ const Color DARKYELLOW   = (Color){0.5f, 0.5f, 0.0f, 1.0f};
 const Color DARKAQUA     = (Color){0.0f, 0.5f, 0.5f, 1.0f};
 const Color DARKMAGENTA  = (Color){0.5f, 0.0f, 0.5f, 1.0f};
 
+const Color COLOR_ARRAY[] = {
+    (Color){0.0f, 0.0f, 0.0f, 1.0f},   // BLACK
+    (Color){1.0f, 1.0f, 1.0f, 1.0f},   // WHITE
+    //(Color){0.0f, 0.0f, 0.0f, 0.0f},   // NOCOLOR
+    
+    (Color){1.0f, 0.0f, 0.0f, 1.0f},   // RED
+    (Color){0.0f, 1.0f, 0.0f, 1.0f},   // GREEN
+    (Color){0.0f, 0.0f, 1.0f, 1.0f},   // BLUE
+    (Color){1.0f, 1.0f, 0.0f, 1.0f},   // YELLOW
+    (Color){0.0f, 1.0f, 1.0f, 1.0f},   // AQUA
+    (Color){1.0f, 0.0f, 1.0f, 1.0f},   // MAGENTA
+    
+    (Color){1.0f, 0.5f, 0.5f, 1.0f},   // LIGHTRED
+    (Color){0.5f, 1.0f, 0.5f, 1.0f},   // LIGHTGREEN
+    (Color){0.5f, 0.5f, 1.0f, 1.0f},   // LIGHTBLUE
+    (Color){1.0f, 1.0f, 0.5f, 1.0f},   // LIGHTYELLOW
+    (Color){0.5f, 1.0f, 1.0f, 1.0f},   // LIGHTAQUA
+    (Color){1.0f, 0.5f, 1.0f, 1.0f},   // LIGHTMAGENTA
+    
+    (Color){0.5f, 0.0f, 0.0f, 1.0f},   // DARKRED
+    (Color){0.0f, 0.5f, 0.0f, 1.0f},   // DARKGREEN
+    (Color){0.0f, 0.0f, 0.5f, 1.0f},   // DARKBLUE
+    (Color){0.5f, 0.5f, 0.0f, 1.0f},   // DARKYELLOW
+    (Color){0.0f, 0.5f, 0.5f, 1.0f},   // DARKAQUA
+    (Color){0.5f, 0.0f, 0.5f, 1.0f}    // DARKMAGENTA
+};
+
 static WrapperCore CORE = {
     .fxaaSamples = 0,
     .fps = 60,
