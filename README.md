@@ -43,4 +43,25 @@ Or download the zip directly into the desired directory
 In the main.c directory, open a cmd, then type `run` 
 
 # How to use in MacOS
-If you are using a Mac, you have to use the same files that we have given u, but changing de "libglfw3.a" in the "lib" file instaling the GLFW Mac's version [here](https://www.glfw.org/download.html) \ and changing the "libglfw3.a" to the current project instead of the others files in "lib", this way, you must play the game using
+If you are using a Mac, you have to use the same files that we have given u, but changing de "libglfw3.a" in the "lib" folder instaling the GLFW Mac's version [here](https://www.glfw.org/download.html) and changing the "libglfw3.a" to the current project instead of the others files in "lib", this way, you must play the game if you follow the next steps in "Terminal":
+Instal Homebrew
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+Instal glfw
+```
+brew install glfw
+```
+Go to the "GLFWrapper" folder using "cd file_x" and use this code:
+```
+gcc pong.c -o programa \
+  -I/opt/homebrew/include \
+  -L/opt/homebrew/lib \
+  -lglfw \
+  -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo \
+  -DGL_SILENCE_DEPRECATION
+```
+After that, just type the executable and you would be able to play it: 
+```
+./programa
+```
