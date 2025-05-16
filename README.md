@@ -19,7 +19,28 @@ int main() {
 }
 ```
 
-# Install compiler for windows
+# Download project
+To install the project you need to preferably install git, \
+at the desired directory, then 
+```
+git clone https://github.com/AnGlonchas/GLFWrapper
+```
+Or download the zip directly into the desired directory 
+
+# Project Structure
+```
+/ProjectName
+├── lib/
+    ├── libglfw3.a
+├── include/
+    ├── GL/gl.h
+    ├── GLFW/glfw3.h
+├── main.c
+```
+
+
+# Windows
+## Install compiler
 Download [here](https://github.com/niXman/mingw-builds-binaries/releases/download/15.1.0-rt_v12-rev0/x86_64-15.1.0-release-posix-seh-ucrt-rt_v12-rev0.7z) \
 In the cmd type `setx path "%path%;c:/path/to/gcc.exe` \
 Reopen cmd and type `gcc --version` \
@@ -31,28 +52,9 @@ This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ```
 
-# Install project
-To install the project you need to preferably install git, \
-at the desired directory, then 
-```
-git clone https://github.com/AnGlonchas/GLFWrapper
-```
-Or download the zip directly into the desired directory 
-
-# Compile Project (Windows)
+## Compile Project
 ```
 gcc main.c -Wall -o a.exe -I./include/ -L./lib/ -lglfw3 -lopengl32 -lgdi32
-```
-
-# Project Structure
-```
-/ProjectName
-├── lib/
-    ├── libglfw3.a
-├── include/
-    ├── GL/gl.h
-    ├── GLFW/glfw3.h
-├── main.c
 ```
 
 # Run for windows
