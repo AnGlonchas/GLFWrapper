@@ -7,7 +7,7 @@ gcc pong.c -o programa -I/opt/homebrew/include -L/opt/homebrew/lib -lglfw -frame
 */
 
 void drawEffect(Circle *ball) {
-    // Loop through all screen drawing rotated squares
+    // Loop through all screen drawing diamonds
 
     for(float x = -1.0f; x <= 1.25f; x += 0.12f) {
         for(float y = -1.0f; y <= 1.25f; y += 0.12f) {
@@ -60,7 +60,7 @@ int main() {
         ball.y += ballSpeed.y*getDeltaTime();
 
         //Make the ball faster as time passes
-        Vector2Dot(&ballSpeed, 1.0005f);
+        Vector2Dot(&ballSpeed, 1.001f);
 
         // Colisión con paletas
         if(checkCollisionRectCircle(paddleLeft, ball) && ballSpeed.x < 0) {
