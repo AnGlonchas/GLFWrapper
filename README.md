@@ -57,7 +57,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 gcc main.c -Wall -o a.exe -I./include/ -L./lib/ -lglfw3 -lopengl32 -lgdi32
 ```
 
-# Run for windows
+# Run
 In the main.c directory, open a cmd, then type `run` 
 
 # MacOS
