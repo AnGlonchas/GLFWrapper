@@ -86,3 +86,12 @@ After that, just type the next executable and you would be able to play it:
 ```
 ./programa
 ```
+
+# Linux
+
+## Install glfw
+On terminal type:
+```
+sudo apt install xorg-dev
+```
+
