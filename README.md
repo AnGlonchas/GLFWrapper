@@ -57,7 +57,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 gcc main.c -Wall -o a.exe -I./include/ -L./lib/ -lglfw3 -lopengl32 -lgdi32
 ```
 
-# Run
+## Run
 In the main.c directory, open a cmd, then type `run` 
 
 # MacOS
@@ -73,7 +73,7 @@ Install glfw
 ```
 brew install glfw
 ```
-## Go to the "GLFWrapper" folder using "cd file_x" and use this code:
+## Go to the "GLFWrapper" folder using "cd file_x" and use this command:
 ```
 gcc pong.c -o programa \
   -I/opt/homebrew/include \
