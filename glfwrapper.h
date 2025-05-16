@@ -5,12 +5,7 @@
 see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 
-TO-DO:
 
-Collision Checkers:
-    Between rects
-    Between circles
-    between rects and circles
 */
 
 
@@ -480,6 +475,10 @@ void updateWindow() {
     glfwSwapBuffers(CORE.window.window);
 }
 
+void changeWindowName(char cname[]){
+    glfwSetWindowTitle(CORE.window.window, cname);
+}
+
 int isWindowOpen() {
     return !glfwWindowShouldClose(CORE.window.window);
 }
@@ -828,11 +827,6 @@ int checkCollisionRects(Rect rectA, Rect rectB) {
         rectA.y < rectB.y + rectB.h &&
         rectA.y + rectA.h > rectB.y
     );
-}
-
-void chance_name(char cname[]){
-
-    glfwSetWindowTitle(CORE.window.window, cname);
 }
 
 #endif
