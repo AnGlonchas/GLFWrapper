@@ -119,6 +119,7 @@ int main() {
                 sprintf(wname, "Pong, Puntos: Izquierda: %d Derecha: %d", scoreL, scoreR);
                 changeWindowName(wname);
             }
+            
             if(ballSpeed.x > 0.0f) {
                 scoreL += 1;
                 sprintf(wname, "Pong, Puntos: Izquierda: %d Derecha: %d", scoreL, scoreR);
