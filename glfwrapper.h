@@ -334,26 +334,26 @@ Math
 */
 
 int randInt(int min, int max) {
-    return rand() % ((max+1) -min) + min;
+    return rand() % ((max + 1) - min) + min;
 }
 
 float distance(Vector2 vecA, Vector2 vecB) {
     return sqrt(pow(vecA.x - vecB.x, 2) + pow(vecA.y - vecB.y, 2));
 }
 
-void limitI(int *num, int from, int to){
-        if((*num) < from) (*num) = from;
-        if((*num) > to) (*num) = to;
+void limitI(int *num, int from, int to) {
+    if((*num) < from) (*num) = from;
+    if((*num) > to) (*num) = to;
 }
 
-void limitF(float *num, float from, float to){
-        if((*num) < from) (*num) = from;
-        if((*num) > to) (*num) = to;
+void limitF(float *num, float from, float to) {
+    if((*num) < from) (*num) = from;
+    if((*num) > to) (*num) = to;
 }
 
-void limitD(double *num, double from, double to){
-        if((*num) < from) (*num) = from;
-        if((*num) > to) (*num) = to;
+void limitD(double *num, double from, double to) {
+    if((*num) < from) (*num) = from;
+    if((*num) > to) (*num) = to;
 }
 
 void Vector2Add(Vector2 *vectorA, Vector2 vectorB) {
@@ -372,42 +372,24 @@ Input capture
 
 */
 
-int isKeyDown(int key) {
-    int state = glfwGetKey(CORE.window.window, key);
-
-    if(state == GLFW_PRESS) {
-        return 1;
-    }
-    return 0;
+inline int isKeyDown(int key) {
+    return glfwGetKey(CORE.window.window, key) == GLFW_PRESS;
 }
 
-int isKeyReleased(int key) {
-    int state = glfwGetKey(CORE.window.window, key);
-
-    if(state == GLFW_RELEASE) {
-        return 1;
-    }
-    return 0;
+inline int isKeyReleased(int key) {
+    return glfwGetKey(CORE.window.window, key) == GLFW_RELEASE;
 }
 
-void setCloseKey(int newKey) {
+inline void setCloseKey(int newKey) {
     CORE.closeKey = newKey;
 }
 
-int isMouseButtonDown(int key) {
-    int state = glfwGetMouseButton(CORE.window.window, key);
-    if (state == GLFW_PRESS) {
-        return 1;
-    }
-    return 0;
+inline int isMouseButtonDown(int key) {
+    return glfwGetMouseButton(CORE.window.window, key) == GLFW_PRESS;
 }
 
-int isMouseButtonReleased(int key) {
-    int state = glfwGetMouseButton(CORE.window.window, key);
-    if (state == GLFW_RELEASE) {
-        return 1;
-    }
-    return 0;
+inline int isMouseButtonReleased(int key) {
+    return glfwGetMouseButton(CORE.window.window, key) == GLFW_RELEASE;
 }
 
 Vector2 getMousePos() {
@@ -417,7 +399,7 @@ Vector2 getMousePos() {
     CORE.mousePos.x = (float)x;
     CORE.mousePos.y = (float)y;
 
-    return (Vector2){
+    return (Vector2) {
         (2*CORE.mousePos.x/CORE.window.width)-1,
         (-2*CORE.mousePos.y/CORE.window.height)+1
     };
@@ -442,8 +424,8 @@ double getMouseY() {
 }
 
 Vector2 getMouseMotion() {
-// To-Do
-    return (Vector2){0,0};
+    // To-Do
+    return (Vector2){0, 0};
 }
 
 /*
@@ -452,17 +434,18 @@ Window stuff
 
 */
 
-void forceProgramClose() {
+inline void forceProgramClose() {
     glfwTerminate();
     exit(1);
 }
 
-void setAntialiasingFactor(int factor) {
+inline void setAntialiasingFactor(int factor) {
     CORE.fxaaSamples = factor;
 }
 
 void createWindow(int width, int height, const char* name) {
     srand(time(NULL));
+
     // Initialize the library
     if (!glfwInit()) {
         fprintf(stderr, "Error: GLFW didnt load (Error code 1)");
@@ -479,6 +462,7 @@ void createWindow(int width, int height, const char* name) {
         glfwTerminate();
         exit(1);
     }
+
     printCoreInfo();
     // Make the window's context current
     glfwMakeContextCurrent(window);
@@ -502,15 +486,15 @@ void updateWindow() {
     glfwSwapBuffers(CORE.window.window);
 }
 
-void changeWindowName(char cname[]){
+inline void changeWindowName(const char *cname){
     glfwSetWindowTitle(CORE.window.window, cname);
 }
 
-int isWindowOpen() {
+inline int isWindowOpen() {
     return !glfwWindowShouldClose(CORE.window.window);
 }
 
-void closeWindow() {
+inline void closeWindow() {
     glfwTerminate();
     printf("GLFW Closed succesfully");
 }
@@ -546,7 +530,7 @@ Blending stuff
 
 void beginBlending(BlendingModes mode) {
     glEnable(GL_BLEND);
-    switch(mode){
+    switch(mode) {
         case BLEND_ADD: glBlendFunc(GL_ONE, GL_ONE); break;
         case BLEND_SCREEN: glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO); break;
         case BLEND_SUB: glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE); break;
@@ -555,7 +539,7 @@ void beginBlending(BlendingModes mode) {
     }
 }
 
-void endBlending() {
+inline void endBlending() {
     glDisable(GL_BLEND);
 }
 
@@ -566,8 +550,8 @@ see https://learn.microsoft.com/es-es/windows/win32/opengl/glbegin for more info
 
 */
 
-void updateBackgroundColor(Color color) {
-    glClearColor(color.r,color.g,color.b,color.a);
+inline void updateBackgroundColor(Color color) {
+    glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -619,14 +603,14 @@ void drawTriangleLines(float x, float y, float w, float h, float wide, Color col
     glLineWidth(wide);
     glBegin(GL_LINES);
     glColor4f(color.r, color.g, color.b, color.a);
-    glVertex2f(x  ,y  );
-    glVertex2f(x+(w/2.0f)  ,y-h);
+    glVertex2f(x, y);
+    glVertex2f(x+(w/2.0f), y-h);
 
-    glVertex2f(x  ,y  );
-    glVertex2f(x-(w/2.0f)  ,y-h);
+    glVertex2f(x, y);
+    glVertex2f(x-(w/2.0f), y-h);
 
-    glVertex2f(x+(w/2.0f)  ,y-h);
-    glVertex2f(x-(w/2.0f)  ,y-h);
+    glVertex2f(x+(w/2.0f), y-h);
+    glVertex2f(x-(w/2.0f), y-h);
 
     glEnd();
     glLineWidth(1);
